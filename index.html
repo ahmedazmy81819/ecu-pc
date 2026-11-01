@@ -3,28 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Medo | Central Stash & Projects</title>
+    <title>Medo | Stash & Cloud Hub</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { background-color: #0b0f19; color: #e2e8f0; font-family: system-ui, -apple-system, sans-serif; }
-        .glass { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
-        .glass-card { background: rgba(30, 41, 59, 0.5); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        body { background-color: #080c14; color: #f1f5f9; font-family: system-ui, -apple-system, sans-serif; }
+        .glass { background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-card { background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.06); }
     </style>
 </head>
-<body class="min-h-screen pb-12">
+<body class="min-h-screen pb-16 relative">
 
-    <!-- Auth Modal (يظهر إذا لم تكن مسجل الدخول) -->
-    <div id="auth-overlay" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
-        <div class="glass p-6 rounded-2xl max-w-sm w-full space-y-4 border border-slate-700 shadow-2xl">
-            <div class="text-center">
+    <!-- Global Drag Overlay -->
+    <div id="drag-overlay" class="fixed inset-0 bg-cyan-950/80 backdrop-blur-md z-50 flex flex-col items-center justify-center hidden border-4 border-dashed border-cyan-400 m-4 rounded-3xl pointer-events-none transition-all duration-300">
+        <i class="fa-solid fa-cloud-arrow-up text-6xl text-cyan-400 mb-4 animate-bounce"></i>
+        <h3 class="text-2xl font-bold text-white">ارمي الملف هنا!</h3>
+        <p class="text-sm text-cyan-200">سيتم رفعه مجاناً وبسرعة</p>
+    </div>
+
+    <!-- Auth Modal -->
+    <div id="auth-overlay" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div class="glass p-6 sm:p-8 rounded-3xl max-w-sm w-full space-y-5 border border-slate-700 shadow-2xl">
+            <div class="text-center space-y-1">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-cyan-500 to-blue-600 mx-auto flex items-center justify-center text-white font-bold text-2xl shadow-lg shadow-cyan-500/20 mb-2">M</div>
                 <h2 class="text-xl font-bold text-white">تسجيل الدخول</h2>
-                <p class="text-xs text-slate-400 mt-1">الموقع محمي، أدخل بياناتك للوصول للـ Stash</p>
+                <p class="text-xs text-slate-400">أدخل حسابك للوصول إلى Stash</p>
             </div>
             <div class="space-y-3">
-                <input type="email" id="auth-email" placeholder="البريد الإلكتروني" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-500">
-                <input type="password" id="auth-password" placeholder="كلمة السر" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-500">
-                <button id="auth-login-btn" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-medium py-2.5 rounded-xl transition-all shadow-lg shadow-cyan-600/20 text-sm">
+                <input type="email" id="auth-email" placeholder="البريد الإلكتروني" class="w-full bg-slate-900/90 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-500">
+                <input type="password" id="auth-password" placeholder="كلمة السر" class="w-full bg-slate-900/90 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-500">
+                <button id="auth-login-btn" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-medium py-3 rounded-xl transition-all shadow-lg shadow-cyan-600/20 text-sm">
                     دخول
                 </button>
             </div>
@@ -32,72 +42,79 @@
         </div>
     </div>
 
-    <!-- Main App UI -->
+    <!-- Header -->
     <header class="glass sticky top-0 z-40 px-6 py-4 border-b border-slate-800 mb-8">
-        <div class="max-w-5xl mx-auto flex justify-between items-center">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-cyan-500/20">M</div>
                 <div>
-                    <h1 class="font-bold text-lg text-white">Medo Central</h1>
-                    <p class="text-xs text-slate-400">Cloud Stash & Workspace</p>
+                    <h1 class="font-bold text-lg text-white">Medo Central Stash</h1>
+                    <p class="text-xs text-slate-400">Cloud Storage & Free Hub</p>
                 </div>
             </div>
             <div class="flex items-center gap-3">
-                <span id="sync-status" class="text-xs px-3 py-1 rounded-full bg-slate-800 text-slate-400 flex items-center gap-2 border border-slate-700">
+                <span id="sync-status" class="text-xs px-3 py-1.5 rounded-full bg-slate-800 text-slate-400 flex items-center gap-2 border border-slate-700">
                     <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span> جاري التحقق...
                 </span>
-                <button id="logout-btn" class="hidden text-xs text-slate-400 hover:text-red-400 p-2"><i class="fa-solid fa-right-from-bracket"></i></button>
+                <button id="logout-btn" class="hidden text-xs text-slate-400 hover:text-red-400 p-2 rounded-lg bg-slate-800/50 border border-slate-700/50" title="خروج">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </button>
             </div>
         </div>
     </header>
 
-    <main class="max-w-5xl mx-auto px-4 space-y-8">
-        <!-- Featured Links Section -->
-        <section class="space-y-3">
-            <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-2">
-                <i class="fa-solid fa-star text-amber-400"></i> الروابط الرئيسية والمشاريع
-            </h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <a href="https://github.com/YOUR_USERNAME/YOUR_REPO" target="_blank" class="glass-card p-4 rounded-xl hover:border-cyan-500/50 transition-all group flex items-center gap-4">
-                    <div class="p-3 rounded-lg bg-slate-800 text-cyan-400"><i class="fa-brands fa-github text-2xl"></i></div>
-                    <div><h3 class="font-semibold text-white">GitHub Repository</h3><p class="text-xs text-slate-400">مستودع الكود المصدري</p></div>
-                </a>
-                <a href="https://your-project-1.com" target="_blank" class="glass-card p-4 rounded-xl hover:border-blue-500/50 transition-all group flex items-center gap-4">
-                    <div class="p-3 rounded-lg bg-slate-800 text-blue-400"><i class="fa-solid fa-globe text-2xl"></i></div>
-                    <div><h3 class="font-semibold text-white">الموقع الأول</h3><p class="text-xs text-slate-400">عرض مباشر</p></div>
-                </a>
-                <a href="https://your-project-2.com" target="_blank" class="glass-card p-4 rounded-xl hover:border-purple-500/50 transition-all group flex items-center gap-4">
-                    <div class="p-3 rounded-lg bg-slate-800 text-purple-400"><i class="fa-solid fa-laptop-code text-2xl"></i></div>
-                    <div><h3 class="font-semibold text-white">الموقع الثاني</h3><p class="text-xs text-slate-400">عرض مباشر</p></div>
-                </a>
-            </div>
-        </section>
+    <main class="max-w-6xl mx-auto px-4 space-y-8">
 
-        <!-- Quick Add Section -->
-        <section class="glass p-5 rounded-2xl border border-slate-800 shadow-xl space-y-4">
-            <h2 class="text-base font-semibold text-white flex items-center gap-2">
-                <i class="fa-solid fa-plus-circle text-cyan-400"></i> ارمي أي حاجة هنا (Quick Stash)
-            </h2>
-            <div class="flex flex-col md:flex-row gap-3">
-                <input type="text" id="stash-input" placeholder="حط لينك، نص، ملاحظة، أو كود..." class="flex-1 bg-slate-900/80 border border-slate-700/80 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-500">
-                <button id="add-btn" class="bg-cyan-600 hover:bg-cyan-500 text-white font-medium px-6 py-3 rounded-xl transition-all shadow-lg shadow-cyan-600/20 flex items-center justify-center gap-2">
+        <!-- Quick Input Section -->
+        <section class="glass p-6 rounded-3xl border border-slate-800 shadow-2xl space-y-4">
+            <div class="flex items-center justify-between">
+                <h2 class="text-base font-semibold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-cloud-arrow-up text-cyan-400"></i> ارمي أي حاجة هنا (Drag & Drop)
+                </h2>
+                <span class="text-xs text-slate-400 hidden sm:inline">مجاني 100% حتى 200MB للملف</span>
+            </div>
+
+            <!-- Drop Zone -->
+            <div id="drop-zone" class="border-2 border-dashed border-slate-700/80 rounded-2xl p-6 text-center hover:border-cyan-500/60 transition-all cursor-pointer bg-slate-900/40">
+                <input type="file" id="file-input" class="hidden" multiple>
+                <div class="space-y-2 pointer-events-none">
+                    <i class="fa-solid fa-folder-open text-3xl text-slate-500"></i>
+                    <p class="text-sm font-medium text-slate-300">اسحب الملفات وارميها هنا، أو <span class="text-cyan-400 underline">اضغط للاختيار</span></p>
+                    <p class="text-xs text-slate-500">صور، PDF، فيديوهات، أو أي ملفات أخرى</p>
+                </div>
+            </div>
+
+            <!-- Text / Link Input -->
+            <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                <input type="text" id="text-input" placeholder="اكتب نوتة، أو حط لينك هنا..." class="flex-1 bg-slate-900/90 border border-slate-700/80 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-500">
+                <button id="text-add-btn" class="bg-cyan-600 hover:bg-cyan-500 text-white font-medium px-6 py-3 rounded-xl transition-all shadow-lg shadow-cyan-600/20 flex items-center justify-center gap-2 shrink-0">
                     <i class="fa-solid fa-paper-plane"></i> حفظ
                 </button>
             </div>
+
+            <!-- Upload Loading Indicator -->
+            <div id="upload-status" class="hidden text-xs text-cyan-400 text-center py-2 animate-pulse">
+                <i class="fa-solid fa-spinner fa-spin"></i> جاري رفع الملف مجاناً... برجاء الانتظار
+            </div>
         </section>
 
-        <!-- Stash List -->
+        <!-- Saved Content Grid -->
         <section class="space-y-4">
-            <div class="flex justify-between items-center">
-                <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-2">
-                    <i class="fa-solid fa-box-archive"></i> العناصر المحفوظة
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+                    <i class="fa-solid fa-box-archive text-slate-400"></i> المحفوظات (<span id="items-count">0</span>)
                 </h2>
-                <span id="items-count" class="text-xs text-slate-500">0 عنصر</span>
+                <div class="w-full sm:w-64 relative">
+                    <i class="fa-solid fa-magnifying-glass absolute right-3 top-3 text-xs text-slate-500"></i>
+                    <input type="text" id="search-input" placeholder="بحث..." class="w-full bg-slate-900/80 border border-slate-800 rounded-xl pr-9 pl-4 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
+                </div>
             </div>
-            <div id="stash-list" class="space-y-3">
-                <div class="text-center py-12 text-slate-500 text-sm">سجل الدخول لعرض عناصرك...</div>
+
+            <div id="stash-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="col-span-full text-center py-12 text-slate-500 text-sm">جاري التحميل...</div>
             </div>
         </section>
+
     </main>
 
     <!-- Firebase SDK Modules -->
@@ -122,24 +139,29 @@
         const db = getFirestore(app);
         const stashCol = collection(db, "stash");
 
+        // DOM Elements
         const authOverlay = document.getElementById("auth-overlay");
         const loginBtn = document.getElementById("auth-login-btn");
         const logoutBtn = document.getElementById("logout-btn");
         const authError = document.getElementById("auth-error");
         const statusEl = document.getElementById("sync-status");
-        const listEl = document.getElementById("stash-list");
-        const inputEl = document.getElementById("stash-input");
-        const addBtn = document.getElementById("add-btn");
+        const stashGrid = document.getElementById("stash-grid");
+        const textInput = document.getElementById("text-input");
+        const textAddBtn = document.getElementById("text-add-btn");
+        const dropZone = document.getElementById("drop-zone");
+        const fileInput = document.getElementById("file-input");
+        const dragOverlay = document.getElementById("drag-overlay");
         const countEl = document.getElementById("items-count");
+        const searchInput = document.getElementById("search-input");
+        const uploadStatus = document.getElementById("upload-status");
 
+        let allDocsData = [];
         let unsubscribeSnapshot = null;
 
-        // Login Handler
         loginBtn.addEventListener("click", async () => {
             const email = document.getElementById("auth-email").value.trim();
             const password = document.getElementById("auth-password").value.trim();
             authError.classList.add("hidden");
-
             try {
                 await signInWithEmailAndPassword(auth, email, password);
             } catch (err) {
@@ -148,22 +170,19 @@
             }
         });
 
-        // Logout Handler
         logoutBtn.addEventListener("click", () => signOut(auth));
 
-        // Auth State Listener
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 authOverlay.classList.add("hidden");
                 logoutBtn.classList.remove("hidden");
-                statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500"></span> متصل متزامن`;
-                loadStashData();
+                statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500"></span> متصل مجاناً`;
+                listenToStash();
             } else {
                 authOverlay.classList.remove("hidden");
                 logoutBtn.classList.add("hidden");
                 statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-red-500"></span> غير مسجل`;
                 if (unsubscribeSnapshot) unsubscribeSnapshot();
-                listEl.innerHTML = `<div class="text-center py-12 text-slate-500 text-sm">سجل الدخول لعرض عناصرك...</div>`;
             }
         });
 
@@ -171,62 +190,176 @@
             try { new URL(str); return true; } catch (_) { return false; }
         }
 
-        async function saveItem() {
-            const val = inputEl.value.trim();
+        textAddBtn.addEventListener("click", async () => {
+            const val = textInput.value.trim();
             if (!val) return;
-            addBtn.disabled = true;
+            textAddBtn.disabled = true;
+
             try {
-                await addDoc(stashCol, { content: val, isUrl: isValidUrl(val), createdAt: serverTimestamp() });
-                inputEl.value = "";
+                await addDoc(stashCol, {
+                    type: isValidUrl(val) ? "url" : "text",
+                    content: val,
+                    createdAt: serverTimestamp()
+                });
+                textInput.value = "";
             } catch (err) {
-                alert("خطأ أثناء الحفظ: " + err.message);
+                alert("خطأ: " + err.message);
             } finally {
-                addBtn.disabled = false;
+                textAddBtn.disabled = false;
             }
+        });
+
+        textInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") textAddBtn.click();
+        });
+
+        dropZone.addEventListener("click", () => fileInput.click());
+        fileInput.addEventListener("change", (e) => { if (e.target.files.length) uploadFilesToCatbox(e.target.files); });
+
+        window.addEventListener("dragover", (e) => { e.preventDefault(); dragOverlay.classList.remove("hidden"); });
+        window.addEventListener("dragleave", (e) => { if (e.clientX === 0 && e.clientY === 0) dragOverlay.classList.add("hidden"); });
+        window.addEventListener("drop", (e) => {
+            e.preventDefault();
+            dragOverlay.classList.add("hidden");
+            if (e.dataTransfer.files.length) uploadFilesToCatbox(e.dataTransfer.files);
+        });
+
+        // Free External Storage Upload (No Credit Card Needed)
+        async function uploadFilesToCatbox(files) {
+            uploadStatus.classList.remove("hidden");
+            for (let file of files) {
+                const formData = new FormData();
+                formData.append("reqtype", "fileupload");
+                formData.append("fileToUpload", file);
+
+                try {
+                    const response = await fetch("https://catbox.moe/user/api.php", {
+                        method: "POST",
+                        body: formData
+                    });
+                    const fileUrl = await response.text();
+
+                    let fileType = "file";
+                    if (file.type.startsWith("image/")) fileType = "image";
+                    else if (file.type === "application/pdf") fileType = "pdf";
+
+                    await addDoc(stashCol, {
+                        type: fileType,
+                        name: file.name,
+                        url: fileUrl.trim(),
+                        size: (file.size / (1024 * 1024)).toFixed(2) + " MB",
+                        createdAt: serverTimestamp()
+                    });
+                } catch (err) {
+                    alert("خطأ أثناء رفع الملف: " + err.message);
+                }
+            }
+            uploadStatus.classList.add("hidden");
         }
 
-        addBtn.addEventListener("click", saveItem);
-        inputEl.addEventListener("keypress", (e) => { if (e.key === "Enter") saveItem(); });
-
-        function loadStashData() {
+        function listenToStash() {
             const q = query(stashCol, orderBy("createdAt", "desc"));
             unsubscribeSnapshot = onSnapshot(q, (snapshot) => {
-                countEl.textContent = `${snapshot.docs.length} عنصر`;
+                allDocsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderItems(allDocsData);
+            });
+        }
 
-                if (snapshot.empty) {
-                    listEl.innerHTML = `<div class="glass-card p-8 rounded-xl text-center text-slate-500 text-sm">مفيش أي عناصر محفوظة لسه.</div>`;
-                    return;
+        function renderItems(items) {
+            countEl.textContent = items.length;
+            if (items.length === 0) {
+                stashGrid.innerHTML = `<div class="col-span-full glass-card p-12 rounded-3xl text-center text-slate-500 text-sm">مفيش أي محتوى محفوظ لسه.</div>`;
+                return;
+            }
+
+            stashGrid.innerHTML = "";
+            items.forEach((item) => {
+                const card = document.createElement("div");
+                card.className = "glass-card p-5 rounded-2xl flex flex-col justify-between gap-4 hover:border-slate-700 transition-all relative group";
+
+                let bodyContent = "";
+
+                if (item.type === "url") {
+                    bodyContent = `
+                        <div class="flex items-start gap-3">
+                            <div class="p-2.5 rounded-xl bg-cyan-950 text-cyan-400 shrink-0"><i class="fa-solid fa-link"></i></div>
+                            <div class="overflow-hidden">
+                                <span class="text-xs text-cyan-400 font-semibold block mb-1">رابط موقع</span>
+                                <a href="${item.content}" target="_blank" class="text-sm font-medium text-white hover:underline break-all">${item.content}</a>
+                            </div>
+                        </div>`;
+                } else if (item.type === "text") {
+                    bodyContent = `
+                        <div class="flex items-start gap-3">
+                            <div class="p-2.5 rounded-xl bg-slate-800 text-slate-300 shrink-0"><i class="fa-solid fa-align-right"></i></div>
+                            <div class="overflow-hidden w-full">
+                                <span class="text-xs text-slate-400 font-semibold block mb-1">ملاحظة نصية</span>
+                                <p class="text-sm text-slate-200 whitespace-pre-wrap break-all">${item.content}</p>
+                            </div>
+                        </div>`;
+                } else if (item.type === "image") {
+                    bodyContent = `
+                        <div class="space-y-2">
+                            <span class="text-xs text-emerald-400 font-semibold block">صورة مرفوعة (${item.size || ''})</span>
+                            <div class="rounded-xl overflow-hidden max-h-48 border border-slate-800 bg-slate-900">
+                                <img src="${item.url}" alt="${item.name}" class="w-full h-full object-cover">
+                            </div>
+                            <p class="text-xs text-slate-300 truncate">${item.name}</p>
+                        </div>`;
+                } else if (item.type === "pdf") {
+                    bodyContent = `
+                        <div class="flex items-center gap-3">
+                            <div class="p-3 rounded-xl bg-red-950 text-red-400 shrink-0"><i class="fa-solid fa-file-pdf text-xl"></i></div>
+                            <div class="overflow-hidden">
+                                <span class="text-xs text-red-400 font-semibold block">مستند PDF (${item.size || ''})</span>
+                                <h4 class="text-sm font-medium text-white truncate">${item.name}</h4>
+                            </div>
+                        </div>`;
+                } else {
+                    bodyContent = `
+                        <div class="flex items-center gap-3">
+                            <div class="p-3 rounded-xl bg-blue-950 text-blue-400 shrink-0"><i class="fa-solid fa-file text-xl"></i></div>
+                            <div class="overflow-hidden">
+                                <span class="text-xs text-blue-400 font-semibold block">ملف (${item.size || ''})</span>
+                                <h4 class="text-sm font-medium text-white truncate">${item.name}</h4>
+                            </div>
+                        </div>`;
                 }
 
-                listEl.innerHTML = "";
-                snapshot.docs.forEach((docSnap) => {
-                    const data = docSnap.data();
-                    const id = docSnap.id;
-                    const card = document.createElement("div");
-                    card.className = "glass-card p-4 rounded-xl flex items-center justify-between gap-4 hover:border-slate-700 transition-colors";
-
-                    let contentHtml = data.isUrl 
-                        ? `<a href="${data.content}" target="_blank" class="text-cyan-400 hover:underline text-sm font-medium break-all flex items-center gap-2"><i class="fa-solid fa-arrow-up-right-from-square text-xs"></i> ${data.content}</a>`
-                        : `<p class="text-slate-200 text-sm whitespace-pre-wrap break-all">${data.content}</p>`;
-
-                    card.innerHTML = `
-                        <div class="flex-1 overflow-hidden">${contentHtml}</div>
-                        <div class="flex items-center gap-2 shrink-0">
-                            <button onclick="navigator.clipboard.writeText('${data.content.replace(/'/g, "\\'")}')" class="p-2 text-slate-400 hover:text-white"><i class="fa-regular fa-copy"></i></button>
-                            <button data-id="${id}" class="delete-btn p-2 text-slate-500 hover:text-red-400"><i class="fa-regular fa-trash-can"></i></button>
+                card.innerHTML = `
+                    <div class="flex-1">${bodyContent}</div>
+                    <div class="flex items-center justify-between border-t border-slate-800/80 pt-3 mt-1">
+                        <div class="flex items-center gap-2">
+                            ${item.url ? `<a href="${item.url}" target="_blank" class="text-xs text-cyan-400 hover:text-cyan-300 flex items-center gap-1 bg-slate-800/60 px-3 py-1.5 rounded-lg border border-slate-700/50"><i class="fa-solid fa-download"></i> فتح/تحميل</a>` : ''}
+                            ${item.content ? `<button onclick="navigator.clipboard.writeText('${item.content.replace(/'/g, "\\'")}')" class="text-xs text-slate-300 hover:text-white bg-slate-800/60 px-3 py-1.5 rounded-lg border border-slate-700/50"><i class="fa-regular fa-copy"></i> نسخ</button>` : ''}
                         </div>
-                    `;
-                    listEl.appendChild(card);
-                });
+                        <button data-id="${item.id}" class="delete-btn text-slate-500 hover:text-red-400 p-1.5 rounded-lg transition-colors">
+                            <i class="fa-regular fa-trash-can"></i>
+                        </button>
+                    </div>
+                `;
 
-                document.querySelectorAll(".delete-btn").forEach(btn => {
-                    btn.addEventListener("click", async (e) => {
-                        const id = e.currentTarget.getAttribute("data-id");
-                        if (confirm("مسح العنصر؟")) await deleteDoc(doc(db, "stash", id));
-                    });
+                stashGrid.appendChild(card);
+            });
+
+            document.querySelectorAll(".delete-btn").forEach(btn => {
+                btn.addEventListener("click", async (e) => {
+                    const id = e.currentTarget.getAttribute("data-id");
+                    if (confirm("هل تريد مسح هذا العنصر نهائياً؟")) {
+                        await deleteDoc(doc(db, "stash", id));
+                    }
                 });
             });
         }
+
+        searchInput.addEventListener("input", (e) => {
+            const val = e.target.value.toLowerCase().trim();
+            const filtered = allDocsData.filter(item => {
+                return (item.content && item.content.toLowerCase().includes(val)) ||
+                       (item.name && item.name.toLowerCase().includes(val));
+            });
+            renderItems(filtered);
+        });
     </script>
 </body>
 </html>
