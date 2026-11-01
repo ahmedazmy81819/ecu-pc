@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medo | Central Stash & Projects</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #0b0f19;
+            color: #e2e8f0;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+        .glass {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-12">
+
+    <!-- Header -->
+    <header class="glass sticky top-0 z-50 px-6 py-4 border-b border-slate-800 mb-8">
+        <div class="max-w-5xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-cyan-500/20">
+                    M
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg text-white">Medo Central</h1>
+                    <p class="text-xs text-slate-400">Cloud Stash & Workspace</p>
+                </div>
+            </div>
+            <span id="sync-status" class="text-xs px-3 py-1 rounded-full bg-slate-800 text-slate-400 flex items-center gap-2 border border-slate-700">
+                <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span> جاري الاتصال...
+            </span>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 space-y-8">
+
+        <!-- Featured Quick Links Section -->
+        <section class="space-y-3">
+            <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+                <i class="fa-solid fa-star text-amber-400"></i> الروابط الرئيسية والمشاريع
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                
+                <!-- GitHub Repo Card -->
+                <a href="https://github.com/YOUR_USERNAME/YOUR_REPO" target="_blank" class="glass-card p-4 rounded-xl hover:border-cyan-500/50 transition-all duration-300 group flex items-center gap-4">
+                    <div class="p-3 rounded-lg bg-slate-800 text-cyan-400 group-hover:scale-110 transition-transform">
+                        <i class="fa-brands fa-github text-2xl"></i>
+                    </div>
+                    <div class="overflow-hidden">
+                        <h3 class="font-semibold text-white group-hover:text-cyan-400 transition-colors">GitHub Repository</h3>
+                        <p class="text-xs text-slate-400 truncate">مستودع الكود المصدري</p>
+                    </div>
+                </a>
+
+                <!-- Custom Web Project 1 -->
+                <a href="https://your-project-1.com" target="_blank" class="glass-card p-4 rounded-xl hover:border-blue-500/50 transition-all duration-300 group flex items-center gap-4">
+                    <div class="p-3 rounded-lg bg-slate-800 text-blue-400 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-globe text-2xl"></i>
+                    </div>
+                    <div class="overflow-hidden">
+                        <h3 class="font-semibold text-white group-hover:text-blue-400 transition-colors">مشروع الموقع الأول</h3>
+                        <p class="text-xs text-slate-400 truncate">اضغط للفتح المباشر</p>
+                    </div>
+                </a>
+
+                <!-- Custom Web Project 2 -->
+                <a href="https://your-project-2.com" target="_blank" class="glass-card p-4 rounded-xl hover:border-purple-500/50 transition-all duration-300 group flex items-center gap-4">
+                    <div class="p-3 rounded-lg bg-slate-800 text-purple-400 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-laptop-code text-2xl"></i>
+                    </div>
+                    <div class="overflow-hidden">
+                        <h3 class="font-semibold text-white group-hover:text-purple-400 transition-colors">مشروع الموقع الثاني</h3>
+                        <p class="text-xs text-slate-400 truncate">اضغط للفتح المباشر</p>
+                    </div>
+                </a>
+
+            </div>
+        </section>
+
+        <!-- Quick Add Section -->
+        <section class="glass p-5 rounded-2xl border border-slate-800 shadow-xl space-y-4">
+            <h2 class="text-base font-semibold text-white flex items-center gap-2">
+                <i class="fa-solid fa-plus-circle text-cyan-400"></i> ارمي أي حاجة هنا (Quick Stash)
+            </h2>
+            <div class="flex flex-col md:flex-row gap-3">
+                <input type="text" id="stash-input" placeholder="حط لينك، نص، ملاحظة، أو كود..." 
+                       class="flex-1 bg-slate-900/80 border border-slate-700/80 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-500 transition-colors">
+                <button id="add-btn" class="bg-cyan-600 hover:bg-cyan-500 text-white font-medium px-6 py-3 rounded-xl transition-all shadow-lg shadow-cyan-600/20 flex items-center justify-center gap-2 shrink-0">
+                    <i class="fa-solid fa-paper-plane"></i> حفظ
+                </button>
+            </div>
+        </section>
+
+        <!-- Saved Items Feed -->
+        <section class="space-y-4">
+            <div class="flex justify-between items-center">
+                <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+                    <i class="fa-solid fa-box-archive text-slate-400"></i> العناصر المحفوظة
+                </h2>
+                <span id="items-count" class="text-xs text-slate-500">0 عنصر</span>
+            </div>
+            
+            <div id="stash-list" class="space-y-3">
+                <div class="text-center py-12 text-slate-500 text-sm">جاري تحميل عناصرك...</div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Firebase SDK Modules -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Your Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDOVXD5A8_bCwyFSjRVEgqYraN4EIaL0Ms",
+            authDomain: "medo-1f0bb.firebaseapp.com",
+            databaseURL: "https://medo-1f0bb-default-rtdb.firebaseio.com",
+            projectId: "medo-1f0bb",
+            storageBucket: "medo-1f0bb.firebasestorage.app",
+            messagingSenderId: "545709426386",
+            appId: "1:545709426386:web:f21921e4dd567be21a0f0b",
+            measurementId: "G-2JJMNMCQ32"
+        };
+
+        // Initialize Firebase & Firestore
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const stashCol = collection(db, "stash");
+
+        const statusEl = document.getElementById("sync-status");
+        const listEl = document.getElementById("stash-list");
+        const inputEl = document.getElementById("stash-input");
+        const addBtn = document.getElementById("add-btn");
+        const countEl = document.getElementById("items-count");
+
+        // Helper: Check if string is URL
+        function isValidUrl(string) {
+            try {
+                new URL(string);
+                return true;
+            } catch (_) {
+                return false;
+            }
+        }
+
+        // Add Item
+        async function saveItem() {
+            const val = inputEl.value.trim();
+            if (!val) return;
+
+            addBtn.disabled = true;
+            addBtn.classList.add("opacity-50");
+
+            try {
+                await addDoc(stashCol, {
+                    content: val,
+                    isUrl: isValidUrl(val),
+                    createdAt: serverTimestamp()
+                });
+                inputEl.value = "";
+            } catch (err) {
+                alert("حدث خطأ أثناء الحفظ: " + err.message);
+            } finally {
+                addBtn.disabled = false;
+                addBtn.classList.remove("opacity-50");
+            }
+        }
+
+        addBtn.addEventListener("click", saveItem);
+        inputEl.addEventListener("keypress", (e) => { if (e.key === "Enter") saveItem(); });
+
+        // Listen for Realtime Changes
+        const q = query(stashCol, orderBy("createdAt", "desc"));
+        onSnapshot(q, (snapshot) => {
+            statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500"></span> متصل متزامن`;
+            countEl.textContent = `${snapshot.docs.length} عنصر`;
+
+            if (snapshot.empty) {
+                listEl.innerHTML = `<div class="glass-card p-8 rounded-xl text-center text-slate-500 text-sm">مفيش أي عناصر محفوظة لسه. جرب ضيف حاجة فوق!</div>`;
+                return;
+            }
+
+            listEl.innerHTML = "";
+            snapshot.docs.forEach((docSnap) => {
+                const data = docSnap.data();
+                const id = docSnap.id;
+                
+                const card = document.createElement("div");
+                card.className = "glass-card p-4 rounded-xl flex items-center justify-between gap-4 hover:border-slate-700 transition-colors group";
+
+                let contentHtml = "";
+                if (data.isUrl) {
+                    contentHtml = `<a href="${data.content}" target="_blank" class="text-cyan-400 hover:underline text-sm font-medium break-all flex items-center gap-2">
+                        <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i> ${data.content}
+                    </a>`;
+                } else {
+                    contentHtml = `<p class="text-slate-200 text-sm whitespace-pre-wrap break-all">${data.content}</p>`;
+                }
+
+                card.innerHTML = `
+                    <div class="flex-1 overflow-hidden">
+                        ${contentHtml}
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0">
+                        <button onclick="navigator.clipboard.writeText('${data.content.replace(/'/g, "\\'")}')" title="نسخ" class="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors">
+                            <i class="fa-regular fa-copy"></i>
+                        </button>
+                        <button data-id="${id}" class="delete-btn p-2 text-slate-500 hover:text-red-400 rounded-lg hover:bg-slate-800 transition-colors">
+                            <i class="fa-regular fa-trash-can"></i>
+                        </button>
+                    </div>
+                `;
+
+                listEl.appendChild(card);
+            });
+
+            // Bind delete events
+            document.querySelectorAll(".delete-btn").forEach(btn => {
+                btn.addEventListener("click", async (e) => {
+                    const id = e.currentTarget.getAttribute("data-id");
+                    if (confirm("تأكيد مسح العنصر ده؟")) {
+                        await deleteDoc(doc(db, "stash", id));
+                    }
+                });
+            });
+        }, (error) => {
+            statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-red-500"></span> خطأ اتصال`;
+            console.error(error);
+        });
+    </script>
+</body>
+</html>
